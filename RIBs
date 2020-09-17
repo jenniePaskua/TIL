@@ -1,0 +1,21 @@
+Ribs(Router, Interactor, Builder)
+
+- Encourage Cross-Platform Collaboration: iOS, Android에서의 유사한 개발 패턴을 제공함으로써, 공동으로 디자인된 단일 아키텍처를 iOS, Android간에 공유할 수 있다. iOS와 Android 팀이 비즈니스 로직 코드를 교차 검토할 수 있는 장점이 있다. 
+
+- Minimize Global States and Decisions: Global state 변경은 예측할 수 없는 동작을 유발하며, 이를 변경했을 때 미칠 영향을 엔지니어가 전부 알 수 없다. RIBs는 잘 격리된(Well-isolated) 개별 RIBs의 Deep hierarchy 내에서 상태를 캡슐화하여, Global State 문제를 방지하도록 권장한다. 
+
+- Testability And Isolation: Class 는 Unit Test가 쉬워야 한다. 개별 RIB 클래스에는 별도의 '책임'이 있는데, 이는 라우팅, 비즈니스 로직, 뷰 로직, 다른 RIB 클래스 생성이 있다. 
+부모 RIB 로직은 자식 RIB 로직과 분리되어(decoupled) 따라서 RIB 클래스를 쉽게 테스트하고 독립적으로 추론할 수 있습니다. 
+
+- Tooling for Developer Productivity: non-trivial(사소한?) 아키텍쳐 패턴을 채택한다고 해서 강력한 툴링(tooling) 없이는 소규모 어플리케이션을 넘어서 확장되지 않습니다. RIBs에는 코드 생성, 정적 분석 및 runtime integrations에 대한 IDE 툴링이 함께 제공되며, 이 툴은 크고 작은 팀의 개발자 생산성을 향상시킵니다!
+
+- Open-Closed Principle: 개발자는 가능하면 기존 코드를 수정하지 않고 새로운 기능을 추가 할 수 있어야 합니다. RIBs를 사용하면 몇 군데서 볼 수 있죠. 예를들어 부모 RIB을 거의 변경하지 않고 부모의 종속성이 필요한 복잡한 자식 RIB을 attach하거나 build할 수 있습니다.
+
+ 
+- Structured around Business Logic: 앱의 비즈니스 로직 구조는 UI의 구조를 엄격하게(또는 절대적으로) 반영할 필요는 없습니다. 예를들어 애니메이션 및 view 성능을 용이하게하기 위해서 View 계층 구조는 RIB 계층 구조보다 더 얕을 수(shallower) 있습니다. 
+
+
+- Explicit Contracts: Requirements(요구사항)은 compile-time safe contracts으로 선언해야합니다.
+
+클래스 종속성과 순서(ordering) 종속성이 충족되지 않으면 클래스는 컴파일되지 않아야 합니다. 우리는 ReactiveX를 사용하여 순서 의존성을 나타내며, 클래스 의존성을 나타내기 위해 type safe dependency injection (DI) 시스템과 data invariants의 생성을 장려..하기 위해 많은 DI scopes를 나타냅니다. 
+
